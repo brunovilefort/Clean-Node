@@ -1,0 +1,20 @@
+{
+  "name": "clean-node",
+  "version": "1.0.0",
+  "description": "API REST, TS, TDD, SOLID, Docker, Clean Architecture, CI/CD, Swagger e GraphQL - Acompanhamento do curso Rodrigo Manguinho - Udemy",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brunovilefort/Clean-Node.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/brunovilefort/Clean-Node/issues"
+  },
+  "homepage": "https://github.com/brunovilefort/Clean-Node#readme"
+}
