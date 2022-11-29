@@ -6,3 +6,8 @@ export type HttpResponse<T = any> = {
 export type HttpRequest<T = any> = {
   body?: T
 }
+
+export const badRequest = (error: Error): HttpResponse<Error> => ({
+  statusCode: 400,
+  body: error
+})
