@@ -1,11 +1,16 @@
 import { SignUpController } from '@/application/controllers'
-import { MissingParamError } from '@/application/errors'
+import { MissingParamError, InvalidParamError } from '@/application/errors'
+import { EmailValidator } from '@/application/contracts'
+
+import { mock, MockProxy } from 'jest-mock-extended'
 
 describe('SignUpController', () => {
   let name: string
   let email: string
   let password: string
   let passwordConfirmation: string
+  let httpRequest: object
+  let emailValidator: MockProxy<EmailValidator>
   let sut: SignUpController
 
   beforeAll(() => {
@@ -13,10 +18,13 @@ describe('SignUpController', () => {
     email = 'any_email@mail.com'
     password = 'any_password'
     passwordConfirmation = 'any_password'
+    httpRequest = { body: { name, email, password, passwordConfirmation } }
+    emailValidator = mock()
+    emailValidator.isValid.mockReturnValue(true)
   })
 
   beforeEach(() => {
-    sut = new SignUpController()
+    sut = new SignUpController(emailValidator)
   })
 
   it('Should return 400 if no name is provided', () => {
@@ -53,5 +61,15 @@ describe('SignUpController', () => {
 
     expect(response.statusCode).toBe(400)
     expect(response.body).toEqual(new MissingParamError('passwordConfirmation'))
+  })
+
+  it('Should return 400 if no invalid email is provided', () => {
+    emailValidator.isValid.mockReturnValueOnce(false)
+    const request = httpRequest
+
+    const response = sut.handle(request)
+
+    expect(response.statusCode).toBe(400)
+    expect(response.body).toEqual(new InvalidParamError('email'))
   })
 })
