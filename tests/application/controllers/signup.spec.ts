@@ -119,4 +119,14 @@ describe('SignUpController', () => {
     expect(addSpy).toHaveBeenCalledWith({ name, email, password })
     expect(addSpy).toHaveBeenCalledTimes(1)
   })
+
+  it('Should return 500 if AddAccount throws', async () => {
+    addAccount.add.mockImplementationOnce(() => { throw new Error() })
+    const request = httpRequest
+
+    const response = await sut.handle(request)
+
+    expect(response.statusCode).toBe(500)
+    expect(response).toEqual(serverError(new Error()))
+  })
 })
