@@ -1,4 +1,4 @@
-import { HttpRequest, HttpResponse , badRequest, serverError } from '@/application/helpers'
+import { HttpRequest, HttpResponse , badRequest, serverError, success } from '@/application/helpers'
 import { InvalidParamError, MissingParamError } from '@/application/errors'
 import { Controller, EmailValidator } from '@/application/contracts'
 import { AddAccount } from '@/domain/contracts/gateways'
@@ -19,7 +19,8 @@ export class SignUpController implements Controller {
       if (password !== passwordConfirmation) return badRequest(new InvalidParamError('passwordConfirmation'))
       const isValid = this.emailValidator.isValid(email)
       if (!isValid) return badRequest(new InvalidParamError('email'))
-      this.addAccount.add({ name, email, password })
+      const account = this.addAccount.add({ name, email, password })
+      return success(account)
     } catch (error) { return serverError(error) }
   }
 }

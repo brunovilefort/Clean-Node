@@ -9,6 +9,11 @@ export type HttpRequest<T = any> = {
   body?: T
 }
 
+export const success = <T = any> (body: T): HttpResponse<T> => ({
+  statusCode: 200,
+  body
+})
+
 export const badRequest = (error: Error): HttpResponse<Error> => ({
   statusCode: 400,
   body: error
