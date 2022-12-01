@@ -64,6 +64,16 @@ describe('SignUpController', () => {
     expect(response.body).toEqual(new MissingParamError('passwordConfirmation'))
   })
 
+  it('Should return 400 if password confirmation fails', async () => {
+    passwordConfirmation = 'invalid_password'
+    const request = { body: { name, email, password, passwordConfirmation } }
+
+    const response = await sut.handle(request)
+
+    expect(response.statusCode).toBe(400)
+    expect(response.body).toEqual(new InvalidParamError('passwordConfirmation'))
+  })
+
   it('Should return 400 if no invalid email is provided', async () => {
     emailValidator.isValid.mockReturnValueOnce(false)
     const request = httpRequest
