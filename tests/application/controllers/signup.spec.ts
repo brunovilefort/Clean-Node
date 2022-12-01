@@ -2,30 +2,36 @@ import { SignUpController } from '@/application/controllers'
 import { MissingParamError, InvalidParamError } from '@/application/errors'
 import { EmailValidator } from '@/application/contracts'
 import { serverError } from '@/application/helpers'
+import { AddAccount } from '@/domain/contracts/gateways'
 
 import { mock, MockProxy } from 'jest-mock-extended'
 
 describe('SignUpController', () => {
+  let id: string
   let name: string
   let email: string
   let password: string
   let passwordConfirmation: string
   let httpRequest: { body: { name: string, email: string, password: string, passwordConfirmation: string } }
   let emailValidator: MockProxy<EmailValidator>
+  let addAccount: MockProxy<AddAccount>
   let sut: SignUpController
 
   beforeAll(() => {
+    id = 'any_id'
     name = 'any_name'
     email = 'any_email@mail.com'
     password = 'any_password'
     passwordConfirmation = 'any_password'
     httpRequest = { body: { name, email, password, passwordConfirmation } }
     emailValidator = mock()
+    addAccount = mock()
     emailValidator.isValid.mockReturnValue(true)
+    addAccount.add.mockReturnValue({ id, name, email, password })
   })
 
   beforeEach(() => {
-    sut = new SignUpController(emailValidator)
+    sut = new SignUpController(emailValidator, addAccount)
   })
 
   it('Should return 400 if no name is provided', async () => {
@@ -102,5 +108,15 @@ describe('SignUpController', () => {
 
     expect(response.statusCode).toBe(500)
     expect(response).toEqual(serverError(new Error()))
+  })
+
+  it('Should call AddAccount with correct input', async () => {
+    const request = httpRequest
+    const addSpy = jest.spyOn(addAccount, 'add')
+
+    await sut.handle(request)
+
+    expect(addSpy).toHaveBeenCalledWith({ name, email, password })
+    expect(addSpy).toHaveBeenCalledTimes(1)
   })
 })
