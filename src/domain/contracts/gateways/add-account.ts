@@ -1,7 +1,7 @@
 import { AccountModel } from '@/domain/entities'
 
 export interface AddAccount {
-  add: (input: AddAccount.Input) => AddAccount.Output
+  add: (input: AddAccount.Input) => Promise<AddAccount.Output>
 }
 
 export namespace AddAccount {

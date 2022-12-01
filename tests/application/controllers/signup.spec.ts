@@ -27,7 +27,7 @@ describe('SignUpController', () => {
     emailValidator = mock()
     addAccount = mock()
     emailValidator.isValid.mockReturnValue(true)
-    addAccount.add.mockReturnValue({ id, name, email, password })
+    addAccount.add.mockResolvedValue({ id, name, email, password })
   })
 
   beforeEach(() => {
