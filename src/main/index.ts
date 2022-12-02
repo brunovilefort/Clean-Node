@@ -1,5 +1,5 @@
 import './config/module-alias'
-import { app } from './app'
+import { app } from './config/app'
 
 import 'dotenv/config'
 
