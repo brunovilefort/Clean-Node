@@ -1,4 +1,5 @@
 import { BcryptAdapter } from '@/infra/gateways'
+import { throwError } from '@/tests/mocks'
 
 import bcrypt from 'bcrypt'
 
@@ -32,5 +33,13 @@ describe('BcryptAdapter', () => {
     const hash = await sut.encrypt('any_value')
 
     expect(hash).toBe('hash')
+  })
+
+  it('Should throw if bcrypt throws', async () => {
+    jest.spyOn(bcrypt, 'hash').mockImplementationOnce(throwError)
+
+    const promise = sut.encrypt('any_value')
+
+    await expect(promise).rejects.toThrow()
   })
 })

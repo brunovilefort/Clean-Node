@@ -1,3 +1,4 @@
+import { throwError } from '@/tests/mocks'
 import { DbAddAccount } from '@/domain/use-cases'
 import { Encrypter } from '@/domain/contracts/gateways'
 import { AddAccountRepository } from '@/domain/contracts/repositories'
@@ -39,7 +40,7 @@ describe('DbAddAccount', () => {
   })
 
   it('Should throw if Encrypter throws', async () => {
-    jest.spyOn(encrypter, 'encrypt').mockResolvedValueOnce(new Promise((resolve, reject) => reject(new Error())))
+    jest.spyOn(encrypter, 'encrypt').mockImplementationOnce(throwError)
 
     const promise = sut.add(accountData)
 
@@ -56,7 +57,7 @@ describe('DbAddAccount', () => {
   })
 
   it('Should throw if Encrypter throws', async () => {
-    jest.spyOn(addAccountRepository, 'add').mockResolvedValueOnce(new Promise((resolve, reject) => reject(new Error())))
+    jest.spyOn(addAccountRepository, 'add').mockImplementationOnce(throwError)
 
     const promise = sut.add(accountData)
 
