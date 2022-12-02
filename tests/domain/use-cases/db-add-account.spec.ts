@@ -1,6 +1,6 @@
 import { throwError } from '@/tests/mocks'
 import { DbAddAccount } from '@/domain/use-cases'
-import { Encrypter } from '@/domain/contracts/gateways'
+import { Hasher } from '@/domain/contracts/gateways'
 import { AddAccountRepository } from '@/domain/contracts/repositories'
 
 import { MockProxy, mock } from 'jest-mock-extended'
@@ -11,7 +11,7 @@ describe('DbAddAccount', () => {
   let email: string
   let password: string
   let accountData: { name: string, email: string, password: string }
-  let encrypter: MockProxy<Encrypter>
+  let hasher: MockProxy<Hasher>
   let addAccountRepository: MockProxy<AddAccountRepository>
   let sut: DbAddAccount
 
@@ -21,26 +21,26 @@ describe('DbAddAccount', () => {
     email = 'any_email@mail.com'
     password = 'any_password'
     accountData = { name, email, password }
-    encrypter = mock()
+    hasher = mock()
     addAccountRepository = mock()
-    encrypter.encrypt.mockResolvedValue('hashed_password')
+    hasher.hash.mockResolvedValue('hashed_password')
     addAccountRepository.add.mockResolvedValue({ id, name, email, password: 'hashed_password' })
   })
 
   beforeEach(() => {
-    sut = new DbAddAccount(encrypter, addAccountRepository)
+    sut = new DbAddAccount(hasher, addAccountRepository)
   })
 
-  it('Should call Encrypter with correct input', async () => {
-    const encryptSpy = jest.spyOn(encrypter, 'encrypt')
+  it('Should call Hasher with correct input', async () => {
+    const hasherSpy = jest.spyOn(hasher, 'hash')
 
     await sut.add(accountData)
 
-    expect(encryptSpy).toHaveBeenCalledWith('any_password')
+    expect(hasherSpy).toHaveBeenCalledWith('any_password')
   })
 
-  it('Should throw if Encrypter throws', async () => {
-    jest.spyOn(encrypter, 'encrypt').mockImplementationOnce(throwError)
+  it('Should throw if Hasher throws', async () => {
+    jest.spyOn(hasher, 'hash').mockImplementationOnce(throwError)
 
     const promise = sut.add(accountData)
 
@@ -56,7 +56,7 @@ describe('DbAddAccount', () => {
     expect(addSpy).toHaveBeenCalledTimes(1)
   })
 
-  it('Should throw if Encrypter throws', async () => {
+  it('Should throw if AddAccountRepository throws', async () => {
     jest.spyOn(addAccountRepository, 'add').mockImplementationOnce(throwError)
 
     const promise = sut.add(accountData)

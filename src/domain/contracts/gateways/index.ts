@@ -1,2 +1,2 @@
 export * from './add-account'
-export * from './encrypter'
+export * from './hasher'
