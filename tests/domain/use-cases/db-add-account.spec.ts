@@ -9,7 +9,7 @@ describe('DbAddAccount', () => {
   let name: string
   let email: string
   let password: string
-  let accountData: { name, email, password }
+  let accountData: { name: string, email: string, password: string }
   let encrypter: MockProxy<Encrypter>
   let addAccountRepository: MockProxy<AddAccountRepository>
   let sut: DbAddAccount
@@ -61,5 +61,11 @@ describe('DbAddAccount', () => {
     const promise = sut.add(accountData)
 
     await expect(promise).rejects.toThrow()
+  })
+
+  it('Should return an account on success', async () => {
+    const account = await sut.add(accountData)
+
+    expect(account).toEqual({ id, name, email, password: 'hashed_password' })
   })
 })
