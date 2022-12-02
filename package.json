@@ -25,6 +25,7 @@
   "homepage": "https://github.com/brunovilefort/Clean-Node#readme",
   "devDependencies": {
     "@jest-mock/express": "^2.0.1",
+    "@types/bcrypt": "^5.0.0",
     "@types/jest": "^29.2.3",
     "@types/node": "^18.11.9",
     "@types/supertest": "^2.0.12",
@@ -47,6 +48,7 @@
     "typescript": "^4.9.3"
   },
   "dependencies": {
+    "bcrypt": "^5.1.0",
     "validator": "^13.7.0"
   }
 }
