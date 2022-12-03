@@ -1,4 +1,8 @@
+<<<<<<< Updated upstream
 import { app } from '@/main/config/app'
+=======
+import { app } from '@/main/app'
+>>>>>>> Stashed changes
 
 import request from 'supertest'
 
