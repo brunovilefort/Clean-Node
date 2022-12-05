@@ -6,7 +6,6 @@ import { AddAccountRepository } from '@/domain/contracts/repositories'
 import { MockProxy, mock } from 'jest-mock-extended'
 
 describe('DbAddAccount', () => {
-  let id: string
   let name: string
   let email: string
   let password: string
@@ -16,7 +15,6 @@ describe('DbAddAccount', () => {
   let sut: DbAddAccount
 
   beforeAll(() => {
-    id = 'any_id'
     name = 'any_name'
     email = 'any_email@mail.com'
     password = 'any_password'
@@ -24,7 +22,7 @@ describe('DbAddAccount', () => {
     hasher = mock()
     addAccountRepository = mock()
     hasher.hash.mockResolvedValue('hashed_password')
-    addAccountRepository.add.mockResolvedValue({ id, name, email, password: 'hashed_password' })
+    addAccountRepository.add.mockResolvedValue(true)
   })
 
   beforeEach(() => {
@@ -67,6 +65,6 @@ describe('DbAddAccount', () => {
   it('Should return an account on success', async () => {
     const account = await sut.add(accountData)
 
-    expect(account).toEqual({ id, name, email, password: 'hashed_password' })
+    expect(account).toBe(true)
   })
 })

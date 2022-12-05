@@ -7,7 +7,6 @@ import { AddAccount } from '@/domain/contracts/gateways'
 import { mock, MockProxy } from 'jest-mock-extended'
 
 describe('SignUpController', () => {
-  let id: string
   let name: string
   let email: string
   let password: string
@@ -18,7 +17,6 @@ describe('SignUpController', () => {
   let sut: SignUpController
 
   beforeAll(() => {
-    id = 'any_id'
     name = 'any_name'
     email = 'any_email@mail.com'
     password = 'any_password'
@@ -27,7 +25,7 @@ describe('SignUpController', () => {
     emailValidator = mock()
     addAccount = mock()
     emailValidator.isValid.mockReturnValue(true)
-    addAccount.add.mockResolvedValue({ id, name, email, password })
+    addAccount.add.mockResolvedValue(true)
   })
 
   beforeEach(() => {
@@ -136,6 +134,5 @@ describe('SignUpController', () => {
     const response = await sut.handle(request)
 
     expect(response.statusCode).toBe(200)
-    expect(response.body).toEqual({ id, name, email, password })
   })
 })
